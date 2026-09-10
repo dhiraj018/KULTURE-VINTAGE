@@ -33,7 +33,7 @@
     "price": 1299,
     "originalPrice": 2199,
     "sizes": ["M", "L", "XL", "XXL"],
-    "image": "/images/jeans.png"
+    "image": "‪C:\Users\dp948\Desktop\fit check\images\jeans.png"
   },
   {
     "id": "fc-005",
@@ -42,6 +42,6 @@
     "price": 899,
     "originalPrice": 1499,
     "sizes": ["M", "L", "XL", "XXL"],
-    "image": "/images/crosstea.png"
+    "image": "‪C:\Users\dp948\Desktop\fit check\images\crosstea.png"
   }
 ]
