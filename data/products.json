@@ -1,32 +1,5 @@
 [
   {
-    "id": "fc-001",
-    "title": "Heavyweight Oversized Acid-Wash Tee",
-    "category": "T-Shirts",
-    "price": 799,
-    "originalPrice": 1299,
-    "sizes": ["M", "L", "XL", "XXL"],
-    "image": "https://images.unsplash.com/photo-1576566588028-4147f3842f27?auto=format&fit=crop&w=800&q=80"
-  },
-  {
-    "id": "fc-002",
-    "title": "Korean Minimal Boxy Formal Shirt",
-    "category": "Shirts",
-    "price": 999,
-    "originalPrice": 1699,
-    "sizes": ["M", "L", "XL"],
-    "image": "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?auto=format&fit=crop&w=800&q=80"
-  },
-  {
-    "id": "fc-003",
-    "title": "Tactical Multi-Pocket Baggy Cargoes",
-    "category": "Bottomwear",
-    "price": 1299,
-    "originalPrice": 2199,
-    "sizes": ["M", "L", "XL", "XXL"],
-    "image": "https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?auto=format&fit=crop&w=800&q=80"
-  },
-  {
     "id": "fc-004",
     "title": "Vintage Light-Wash Panelled Baggy Jeans",
     "category": "Bottomwear",
