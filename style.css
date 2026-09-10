@@ -54,7 +54,7 @@ body { background: var(--bg-primary); color: var(--text-main); font-family: var(
 
 .btn-solid { background: var(--accent-white); color: #000; border: none; padding: 0.7rem 1rem; font-weight: 700; border-radius: 4px; cursor: pointer; }
 
-/* Bag & Modals */
+/* Bag Drawer & Modals */
 .drawer-shade, .modal-shade { position: fixed; inset: 0; background: rgba(0,0,0,0.75); display: none; z-index: 200; }
 .drawer-shade.active, .modal-shade.active { display: block; }
 .bag-drawer { position: fixed; top: 0; right: -420px; width: 100%; max-width: 400px; height: 100%; background: var(--bg-secondary); border-left: 1px solid var(--border-color); z-index: 210; display: flex; flex-direction: column; transition: right 0.3s ease; }
@@ -90,3 +90,46 @@ body { background: var(--bg-primary); color: var(--text-main); font-family: var(
 .admin-table th, .admin-table td { padding: 0.6rem; border-bottom: 1px solid var(--border-color); font-size: 0.85rem; text-align: left; }
 
 .footer { text-align: center; padding: 2rem; border-top: 1px solid var(--border-color); color: var(--text-muted); font-size: 0.8rem; }
+
+/* WhatsApp Buttons & Floating Trigger */
+.btn-whatsapp-submit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  background-color: #25D366 !important;
+  color: #000000 !important;
+  font-weight: 700;
+  transition: opacity 0.2s ease, transform 0.1s ease;
+}
+
+.btn-whatsapp-submit:hover {
+  opacity: 0.92;
+  transform: translateY(-1px);
+}
+
+.wa-icon {
+  fill: #000000;
+}
+
+.wa-float {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background-color: #25D366;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+  z-index: 150;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  text-decoration: none;
+}
+
+.wa-float:hover {
+  transform: scale(1.08);
+  box-shadow: 0 6px 20px rgba(37, 211, 102, 0.45);
+}

@@ -188,7 +188,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // Bag & Modal Listeners
   if (bagOpenBtn) bagOpenBtn.onclick = () => { bagDrawer.classList.add("active"); bagOverlay.classList.add("active"); };
   if (bagCloseBtn) bagCloseBtn.onclick = () => { bagDrawer.classList.remove("active"); bagOverlay.classList.remove("active"); };
   if (bagOverlay) bagOverlay.onclick = () => { bagDrawer.classList.remove("active"); bagOverlay.classList.remove("active"); };
@@ -216,7 +215,6 @@ document.addEventListener("DOMContentLoaded", () => {
   };
   if (checkoutCloseBtn) checkoutCloseBtn.onclick = () => checkoutModal.classList.remove("active");
 
-  // WhatsApp Order Submission
   if (orderForm) orderForm.onsubmit = async (e) => {
     e.preventDefault();
     const name = get("orderCustName").value.trim();
@@ -260,7 +258,6 @@ document.addEventListener("DOMContentLoaded", () => {
     trackOrderBtn.click();
   };
 
-  // Order Tracking
   if (trackOrderBtn) trackOrderBtn.onclick = async () => {
     const id = trackIdInput.value.trim().toUpperCase();
     if (!id) return;
@@ -280,7 +277,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
-  // Auth Handling
   function syncAuth() {
     const isAdmin = currentUser && currentUser.isAdmin;
     if (currentUser) {
@@ -344,23 +340,51 @@ document.addEventListener("DOMContentLoaded", () => {
     syncAuth();
   };
 
-  // Admin APIs
   if (newProductForm) newProductForm.onsubmit = async (e) => {
     e.preventDefault();
-    await fetch('/api/products', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        title: get("prodTitle").value.trim(),
-        category: get("prodCategory").value,
-        price: Number(get("prodPrice").value) || 0,
-        originalPrice: Number(get("prodOrigPrice").value) || 0,
-        sizes: get("prodSizes").value.split(',').map(s => s.trim()).filter(Boolean),
-        image: get("prodImgUrl").value.trim() || "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?auto=format&fit=crop&w=800&q=80"
-      })
-    });
-    newProductForm.reset();
-    loadProducts();
+
+    const fileInput = get("prodFileInput");
+    let finalImage = get("prodImgUrl") ? get("prodImgUrl").value.trim() : "";
+
+    if (fileInput && fileInput.files && fileInput.files[0]) {
+      finalImage = await new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.readAsDataURL(fileInput.files[0]);
+      });
+    }
+
+    if (!finalImage) {
+      finalImage = "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?auto=format&fit=crop&w=800&q=80";
+    }
+
+    const payload = {
+      title: get("prodTitle").value.trim(),
+      category: get("prodCategory").value,
+      price: Number(get("prodPrice").value) || 0,
+      originalPrice: Number(get("prodOrigPrice").value) || 0,
+      sizes: get("prodSizes").value.split(',').map(s => s.trim()).filter(Boolean),
+      image: finalImage
+    };
+
+    try {
+      const res = await fetch('/api/products', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      if (res.ok) {
+        alert("Product drop added successfully!");
+        newProductForm.reset();
+        loadProducts();
+      } else {
+        alert("Failed to save product.");
+      }
+    } catch (err) {
+      console.error("Upload error:", err);
+      alert("Server error uploading product.");
+    }
   };
 
   async function fetchAdmin() {
