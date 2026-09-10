@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FIT CHECK | Streetwear & Menswear</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <div class="top-strip">
+    <span>Online & Offline Available | Shipping All Over India 🇮🇳 | WhatsApp: +91 9101925887</span>
+  </div>
+
+  <header class="navbar">
+    <div class="nav-shell">
+      <a href="#" class="brand">FIT CHECK</a>
+      <div class="nav-right">
+        <button id="authModalBtn" class="btn-outline">Sign In</button>
+        <div id="userBadge" class="user-pill" style="display: none;">
+          <span id="userName">User</span>
+          <span id="vipIndicator" class="vip-tag" style="display: none;">VIP 10% OFF</span>
+          <button id="logoutBtn" class="link-logout">Sign Out</button>
+        </div>
+        <button id="bagOpenBtn" class="btn-bag">
+          <span>BAG</span>
+          <span id="bagCount" class="bag-badge">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <section class="hero-wrap">
+    <div class="hero-inner">
+      <h1 class="hero-headline">NEXT-GEN STREETWEAR & SMART CASUALS.</h1>
+      <p class="hero-subline">Heavy GSM drop-shoulders, boxy silhouettes, and baggy cargo aesthetics.</p>
+    </div>
+  </section>
+
+  <section class="catalog-shell">
+    <div class="catalog-head">
+      <div class="filter-pills" id="categoryTabs">
+        <button class="pill active" data-cat="All">All Drops</button>
+        <button class="pill" data-cat="T-Shirts">T-Shirts</button>
+        <button class="pill" data-cat="Shirts">Shirts</button>
+        <button class="pill" data-cat="Bottomwear">Bottomwear</button>
+      </div>
+      <div class="sort-box">
+        <select id="sortSelect">
+          <option value="default">Sort By: Recommended</option>
+          <option value="price-asc">Price: Low to High</option>
+          <option value="price-desc">Price: High to Low</option>
+        </select>
+      </div>
+    </div>
+    <div id="productGrid" class="product-grid"></div>
+  </section>
+
+  <!-- Live Tracking -->
+  <section class="tracking-section">
+    <div class="tracking-card">
+      <div class="tracking-header">
+        <span style="font-size: 2rem;">📦</span>
+        <div>
+          <h3>Live Parcel Tracking</h3>
+          <p>Track your shipment delivery stages nationwide.</p>
+        </div>
+      </div>
+      <div class="tracking-input-group">
+        <input type="text" id="trackIdInput" placeholder="e.g. FC-123456" />
+        <button id="trackOrderBtn" class="btn-solid">Track</button>
+      </div>
+      <div id="trackingResultContainer" style="display: none;"></div>
+    </div>
+  </section>
+
+  <!-- Admin Panel -->
+  <section id="adminSection" class="admin-portal" style="display: none;">
+    <div class="admin-container">
+      <h2>👑 FIT CHECK Admin Console</h2>
+      
+      <div class="admin-card">
+        <h3>➕ Add Product Drop</h3>
+        <form id="newProductForm" class="admin-form-grid">
+          <div class="field">
+            <label>Product Title</label>
+            <input type="text" id="prodTitle" required placeholder="e.g. Acid-Wash Tee" />
+          </div>
+          <div class="field">
+            <label>Category</label>
+            <select id="prodCategory">
+              <option value="T-Shirts">T-Shirts</option>
+              <option value="Shirts">Shirts</option>
+              <option value="Bottomwear">Bottomwear</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Price (₹)</label>
+            <input type="number" id="prodPrice" required placeholder="799" />
+          </div>
+          <div class="field">
+            <label>Compare MRP (₹)</label>
+            <input type="number" id="prodOrigPrice" required placeholder="1299" />
+          </div>
+          <div class="field full-width">
+            <label>Sizes (comma separated)</label>
+            <input type="text" id="prodSizes" value="M, L, XL, XXL" required />
+          </div>
+          <div class="field full-width">
+            <label>Image URL</label>
+            <input type="url" id="prodImgUrl" placeholder="https://example.com/item.jpg" />
+          </div>
+          <div class="field full-width">
+            <button type="submit" class="btn-solid" style="width: 100%;">Publish Drop</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="admin-card">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <h3>👥 Customer Database</h3>
+          <button id="exportCsvBtn" type="button" class="btn-solid" style="background: #25D366; color: #000;">📥 Export CSV</button>
+        </div>
+        <table class="admin-table">
+          <thead>
+            <tr><th>Customer</th><th>Phone</th><th>Status</th><th>Action</th></tr>
+          </thead>
+          <tbody id="customerTableBody"></tbody>
+        </table>
+      </div>
+
+      <div class="admin-card">
+        <h3>🛍️ Live Orders</h3>
+        <table class="admin-table">
+          <thead>
+            <tr><th>Tracking ID</th><th>Customer</th><th>Total</th><th>Status</th></tr>
+          </thead>
+          <tbody id="adminOrdersTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- Bag Drawer -->
+  <div id="bagOverlay" class="drawer-shade"></div>
+  <aside id="bagDrawer" class="bag-drawer">
+    <div class="drawer-top">
+      <h3>YOUR BAG (<span id="drawerCount">0</span>)</h3>
+      <button id="bagCloseBtn" class="btn-close">&times;</button>
+    </div>
+    <div id="drawerItemsList" class="drawer-body"></div>
+    <div class="drawer-bottom">
+      <div class="bill-row"><span>Subtotal</span><span id="drawerSubtotal">₹0</span></div>
+      <div class="bill-row vip-row" id="drawerVipRow" style="display: none;"><span>VIP 10% OFF</span><span id="drawerVipDiscount">-₹0</span></div>
+      <div class="bill-row final-row"><span>Total Payable</span><span id="drawerFinalTotal">₹0</span></div>
+      <button id="openCheckoutBtn" class="btn-solid" style="width:100%; margin-top:1rem;">CHECKOUT</button>
+    </div>
+  </aside>
+
+  <!-- Checkout Modal -->
+  <div id="checkoutModal" class="modal-shade">
+    <div class="modal-box">
+      <button id="checkoutCloseBtn" class="modal-close">&times;</button>
+      <h2>PARCEL DISPATCH DETAILS</h2>
+      <form id="orderForm">
+        <div class="field"><label>Full Name</label><input type="text" id="orderCustName" required /></div>
+        <div class="field"><label>WhatsApp Number</label><input type="tel" id="orderCustPhone" required /></div>
+        <div class="field"><label>Delivery Address & PIN</label><textarea id="orderCustAddress" rows="2" required></textarea></div>
+        <button type="submit" class="btn-solid" style="width:100%; margin-top:1rem;">ORDER ON WHATSAPP</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Auth Modal -->
+  <div id="authModal" class="modal-shade">
+    <div class="modal-box">
+      <button id="authCloseBtn" class="modal-close">&times;</button>
+      <div class="auth-switcher">
+        <button id="tabLoginBtn" class="active" type="button">LOGIN</button>
+        <button id="tabRegBtn" type="button">REGISTER</button>
+      </div>
+      <form id="loginForm" class="auth-form">
+        <div class="field"><label>Mobile</label><input type="tel" id="loginPhone" required /></div>
+        <div class="field"><label>Password (Admin: 1s0k9j2d)</label><input type="password" id="loginPass" required /></div>
+        <button type="submit" class="btn-solid" style="width:100%;">LOGIN</button>
+      </form>
+      <form id="regForm" class="auth-form" style="display: none;">
+        <div class="field"><label>Full Name</label><input type="text" id="regName" required /></div>
+        <div class="field"><label>Mobile</label><input type="tel" id="regPhone" required /></div>
+        <div class="field"><label>Password</label><input type="password" id="regPass" required /></div>
+        <button type="submit" class="btn-solid" style="width:100%;">CREATE ACCOUNT</button>
+      </form>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <p>© 2026 FIT CHECK Menswear. Online & Offline Stores. Parcel Shipping All Over India.</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
