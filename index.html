@@ -110,7 +110,8 @@
             <input type="text" id="prodSizes" value="M, L, XL, XXL" required />
           </div>
           <div class="field full-width">
-            <label>Image URL</label>
+            <label>Product Image (Upload from File Explorer or Paste URL)</label>
+            <input type="file" id="prodFileInput" accept="image/*" style="margin-bottom: 0.5rem; background: transparent; border: none; padding: 0;" />
             <input type="url" id="prodImgUrl" placeholder="https://example.com/item.jpg" />
           </div>
           <div class="field full-width">
@@ -184,7 +185,7 @@
       </div>
       <form id="loginForm" class="auth-form">
         <div class="field"><label>Mobile</label><input type="tel" id="loginPhone" required /></div>
-        <div class="field"><label>Password (Admin: 1s0k9j2d)</label><input type="password" id="loginPass" required /></div>
+        <div class="field"><label>Password</label><input type="password" id="loginPass" required /></div>
         <button type="submit" class="btn-solid" style="width:100%;">LOGIN</button>
       </form>
       <form id="regForm" class="auth-form" style="display: none;">
