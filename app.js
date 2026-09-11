@@ -1,6 +1,6 @@
 const DEFAULT_CONFIG = {
   brandName: "KULTURE VINTAGE",
-  phone: "919876543210", 
+  phone: "919322575059", 
   tagline: "PAIN TO PURPOSE",
   branches: "CAMP • VIMAN NAGAR • PCMC • KOTHRUD | PAN-INDIA DISPATCH 📦",
   logoUrl: "https://lh3.googleusercontent.com/d/1P6zo6GL9E0lgYaH7W9V3SaOvd0EQ5fzS",
