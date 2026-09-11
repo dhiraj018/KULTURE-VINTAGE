@@ -10,7 +10,7 @@
 <body>
 
   <!-- Top Hub Announcement -->
-  <div class="top-banner">
+  <div class="top-banner" id="top-announcement-bar">
     CAMP • VIMAN NAGAR • PCMC • KOTHRUD | PAN-INDIA DISPATCH 📦
   </div>
 
@@ -22,14 +22,13 @@
         class="brand-logo-img" 
         src="https://images.unsplash.com/photo-1555529771-835f59fc5efe?w=100&auto=format&fit=crop&q=80" 
         alt="Kulture Vintage Logo" 
-        onerror="this.style.display='none'"
       />
       <div class="brand-text-group">
         <div class="brand-title-row">
           <span class="logo-fallback-badge">KV</span>
-          <h1 class="brand-title">KULTURE VINTAGE</h1>
+          <h1 class="brand-title" id="display-brand-title">KULTURE VINTAGE</h1>
         </div>
-        <p class="brand-subtitle">PAIN TO PURPOSE</p>
+        <p class="brand-subtitle" id="display-brand-tagline">PAIN TO PURPOSE</p>
       </div>
     </div>
 
@@ -51,7 +50,7 @@
     <div class="hero-content">
       <span class="tag">PUNE'S AUTHENTIC THRIFT & STREETWEAR</span>
       <h2>HEAVYWEIGHT DROPS.<br>RAW AESTHETICS.</h2>
-      <p>Direct WhatsApp automated checkout • Real-time dispatch hub • Pune flagship retail inventory</p>
+      <p id="hero-hub-text">Direct WhatsApp automated checkout • Real-time dispatch hub • Pune flagship retail inventory</p>
     </div>
   </section>
 
@@ -72,17 +71,15 @@
       </div>
     </div>
 
-    <div id="product-grid" class="product-grid">
-      <!-- Injected via script.js -->
-    </div>
+    <div id="product-grid" class="product-grid"></div>
   </main>
 
-  <!-- Dedicated Admin Dashboard View -->
+  <!-- Admin Dashboard View -->
   <section class="admin-section" id="admin-view" style="display: none;">
     <div class="admin-header">
       <div>
         <h2>STORE CONTROL CENTER</h2>
-        <p class="admin-subhead">Kulture Vintage Pune Retail & Online Log</p>
+        <p class="admin-subhead">Kulture Vintage Pune Retail & Brand Operations</p>
       </div>
       <button class="action-btn back-store-btn" id="admin-exit-btn">← RETURN TO STORE</button>
     </div>
@@ -107,6 +104,37 @@
       </div>
     </div>
 
+    <!-- Live Brand Customizer -->
+    <div class="admin-box settings-highlight-box">
+      <h4>⚙️ BRAND CONFIGURATION & WHATSAPP GATEWAY</h4>
+      <p class="admin-desc">Update the permanent logo, active checkout WhatsApp number, and store tags anytime.</p>
+      <form id="brand-settings-form" class="admin-form-grid">
+        <div class="input-group">
+          <label>Brand Logo Image URL</label>
+          <input type="url" id="setting-logo-url" placeholder="Paste image link (https://...)" />
+        </div>
+        <div class="input-group">
+          <label>OR Upload Logo File from Device</label>
+          <input type="file" id="setting-logo-file" accept="image/*" />
+        </div>
+        <div class="input-group">
+          <label>Official Store WhatsApp Number (with Country Code)</label>
+          <input type="text" id="setting-phone" placeholder="e.g. 919876543210" required />
+        </div>
+        <div class="input-group">
+          <label>Brand Tagline</label>
+          <input type="text" id="setting-tagline" placeholder="e.g. PAIN TO PURPOSE" required />
+        </div>
+        <div class="input-group" style="grid-column: 1 / -1;">
+          <label>Store Branches / Fulfillment Tag</label>
+          <input type="text" id="setting-branches" placeholder="e.g. CAMP • VIMAN NAGAR • PCMC • KOTHRUD" required />
+        </div>
+        <button type="submit" class="action-btn" style="grid-column: 1 / -1; margin-top: 10px;">
+          SAVE & UPDATE STOREFRONT PERMANENTLY 💾
+        </button>
+      </form>
+    </div>
+
     <!-- Drop Creation Form -->
     <div class="admin-box">
       <h4>ADD NEW DROP TO VAULT</h4>
@@ -122,7 +150,7 @@
         <input type="number" id="new-price" placeholder="Sale Price (₹)" required />
         <input type="number" id="new-orig-price" placeholder="Retail Price (₹)" required />
         <input type="text" id="new-badge" placeholder="Badge (e.g. Limited / Pune Drop)" value="New Drop" />
-        <input type="text" id="new-sizes" placeholder="Available Sizes (comma separated, e.g. M, L, XL)" value="M, L, XL" required />
+        <input type="text" id="new-sizes" placeholder="Available Sizes (e.g. M, L, XL)" value="M, L, XL" required />
         <input type="url" id="new-img" placeholder="Direct Image URL" required />
         <button type="submit" class="action-btn">PUSH DROP TO STORE ⚡</button>
       </form>
@@ -145,9 +173,7 @@
               <th>Action</th>
             </tr>
           </thead>
-          <tbody id="customer-table-body">
-            <!-- Dynamic CRM records -->
-          </tbody>
+          <tbody id="customer-table-body"></tbody>
         </table>
       </div>
     </div>
@@ -167,15 +193,13 @@
               <th>Action</th>
             </tr>
           </thead>
-          <tbody id="orders-table-body">
-            <!-- Dynamic orders -->
-          </tbody>
+          <tbody id="orders-table-body"></tbody>
         </table>
       </div>
     </div>
   </section>
 
-  <!-- Sign In & Account Modal -->
+  <!-- Sign In Modal -->
   <div id="auth-modal" class="auth-modal">
     <div class="auth-box">
       <div class="auth-header">
@@ -184,7 +208,7 @@
       </div>
 
       <div id="auth-logged-out-view">
-        <p class="auth-desc">Enter your WhatsApp number and security PIN to access your bag and profile.</p>
+        <p class="auth-desc">Enter your WhatsApp number and security PIN to access your account.</p>
         <div class="checkout-inputs">
           <input type="text" id="login-name" placeholder="Full Name" required />
           <input type="tel" id="login-phone" placeholder="WhatsApp Number (10 digits)" required />
@@ -212,9 +236,7 @@
       <button class="close-btn" id="cart-close-btn">✕</button>
     </div>
     
-    <div id="cart-items" class="cart-items">
-      <!-- Items dynamically added -->
-    </div>
+    <div id="cart-items" class="cart-items"></div>
 
     <div class="cart-footer">
       <div class="total-row">
@@ -232,6 +254,16 @@
         CONFIRM ORDER VIA WHATSAPP ⚡
       </button>
     </div>
+  </div>
+
+  <!-- Floating Automated WhatsApp Inquiry Trigger -->
+  <div class="whatsapp-float-container" id="whatsapp-inquiry-btn" title="Chat with Kulture Vintage Support">
+    <span class="whatsapp-float-tooltip">Chat with Pune Hub</span>
+    <button class="whatsapp-float-btn">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766 0-3.18-2.587-5.771-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.312.045-.694.062-2.128-.535-1.745-.726-2.883-2.5-2.97-2.616-.087-.117-.708-.941-.708-1.796 0-.855.449-1.277.608-1.451.16-.175.349-.218.465-.218.117 0 .233.001.334.006.107.005.252-.041.394.301.146.353.498 1.218.542 1.306.044.088.073.191.015.308-.059.117-.088.19-.175.293-.087.103-.184.23-.263.308-.088.088-.18.184-.078.36.103.176.457.754.981 1.221.676.602 1.246.788 1.423.876.176.088.278.074.382-.044.103-.118.438-.512.555-.688.117-.176.234-.146.394-.088.16.058 1.02.481 1.195.569.175.088.292.132.335.205.044.073.044.423-.1 1.828zM12 2C6.477 2 2 6.477 2 12c0 1.891.524 3.662 1.435 5.176L2 22l4.987-1.308C8.428 21.536 10.158 22 12 22c5.523 0 10-4.477 10-10S17.523 2 12 2z"/>
+      </svg>
+    </button>
   </div>
 
   <!-- Backdrop -->

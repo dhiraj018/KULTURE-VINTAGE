@@ -1,16 +1,59 @@
 /**
- * KULTURE VINTAGE - Admin Suite, Protected Auth & WhatsApp Checkout
+ * KULTURE VINTAGE - Admin Suite, Dynamic Settings & WhatsApp Gateway
  */
 
-const STORE_CONFIG = {
+const DEFAULT_CONFIG = {
   brandName: "KULTURE VINTAGE",
-  phone: "919876543210", // Target store WhatsApp Number
-  fulfillmentHub: "Pune Hub (Camp / Viman Nagar / PCMC / Kothrud)",
-  // Private Admin Access Key - NEVER exposed in HTML or user interfaces
-  adminSecretPin: "9999" 
+  phone: "919876543210", // Updated permanently via Admin HQ
+  tagline: "PAIN TO PURPOSE",
+  branches: "CAMP • VIMAN NAGAR • PCMC • KOTHRUD | PAN-INDIA DISPATCH 📦",
+  logoUrl: "https://images.unsplash.com/photo-1555529771-835f59fc5efe?w=100&auto=format&fit=crop&q=80",
+  adminSecretPin: "9999" // Master Admin PIN
 };
 
-// CRM Data Storage in LocalStorage
+// LocalStorage Persistent Settings Engine
+function getStoreSettings() {
+  const saved = localStorage.getItem("kv_store_settings");
+  if (!saved) {
+    localStorage.setItem("kv_store_settings", JSON.stringify(DEFAULT_CONFIG));
+    return DEFAULT_CONFIG;
+  }
+  return JSON.parse(saved);
+}
+
+function saveStoreSettings(settings) {
+  localStorage.setItem("kv_store_settings", JSON.stringify(settings));
+  applyStoreSettings();
+}
+
+function applyStoreSettings() {
+  const cfg = getStoreSettings();
+
+  const logoImg = document.getElementById("brand-logo");
+  if (logoImg && cfg.logoUrl) {
+    logoImg.src = cfg.logoUrl;
+    logoImg.style.display = "block";
+  }
+
+  const taglineEl = document.getElementById("display-brand-tagline");
+  if (taglineEl) taglineEl.innerText = cfg.tagline;
+
+  const topBanner = document.getElementById("top-announcement-bar");
+  if (topBanner) topBanner.innerText = cfg.branches;
+
+  // Pre-fill Admin customizer inputs
+  const inputLogo = document.getElementById("setting-logo-url");
+  const inputPhone = document.getElementById("setting-phone");
+  const inputTagline = document.getElementById("setting-tagline");
+  const inputBranches = document.getElementById("setting-branches");
+
+  if (inputLogo) inputLogo.value = cfg.logoUrl.startsWith("data:") ? "" : cfg.logoUrl;
+  if (inputPhone) inputPhone.value = cfg.phone;
+  if (inputTagline) inputTagline.value = cfg.tagline;
+  if (inputBranches) inputBranches.value = cfg.branches;
+}
+
+// CRM Data Storage
 function getCRMData() {
   const defaultCustomers = [
     { name: "Aarav Deshmukh", phone: "9822011223", pin: "1234", address: "Koregaon Park, Lane 7, Pune 411001", ordersCount: 4, totalSpent: 6290, tier: "vip" },
@@ -76,7 +119,6 @@ function syncAuthUI() {
       if (adminPanelBtn) adminPanelBtn.style.display = "none";
     }
 
-    // Autofill checkout fields
     if (document.getElementById("cust-name")) document.getElementById("cust-name").value = user.name;
     if (document.getElementById("cust-phone")) document.getElementById("cust-phone").value = user.phone;
     if (document.getElementById("cust-address")) document.getElementById("cust-address").value = user.address;
@@ -90,7 +132,6 @@ function syncAuthUI() {
   if (typeof renderCatalogGrid === "function") renderCatalogGrid();
 }
 
-// Toggle Auth Modal
 function toggleAuthModal(openState) {
   const modal = document.getElementById("auth-modal");
   const backdrop = document.getElementById("backdrop");
@@ -108,7 +149,6 @@ function toggleAuthModal(openState) {
   }
 }
 
-// Toggle Admin Dashboard
 function toggleAdminView(showAdmin) {
   const storeView = document.getElementById("storefront-view");
   const heroView = document.querySelector(".hero");
@@ -118,6 +158,7 @@ function toggleAdminView(showAdmin) {
     storeView.style.display = "none";
     heroView.style.display = "none";
     adminView.style.display = "block";
+    applyStoreSettings();
     renderAdminTables();
   } else {
     storeView.style.display = "block";
@@ -126,7 +167,6 @@ function toggleAdminView(showAdmin) {
   }
 }
 
-// Render Admin KPIs & Data Tables
 function renderAdminTables() {
   const customers = getCRMData();
   const orders = getOrderLogs();
@@ -195,7 +235,7 @@ window.updateOrderStatus = function(index, newStatus) {
   renderAdminTables();
 };
 
-// WhatsApp Order Process
+// WhatsApp Order Checkout
 function checkoutViaWhatsApp() {
   if (cart.length === 0) {
     alert("Your bag is empty.");
@@ -207,14 +247,15 @@ function checkoutViaWhatsApp() {
   const address = document.getElementById("cust-address").value.trim();
 
   if (!name || !phone || !address) {
-    alert("Please provide your name, WhatsApp number, and complete delivery address.");
+    alert("Please enter your name, WhatsApp number, and delivery address.");
     return;
   }
 
+  const cfg = getStoreSettings();
   const customers = getCRMData();
   const flagged = customers.find(c => c.phone === phone && c.tier === "flagged");
   if (flagged) {
-    alert("Notice: This number is flagged for repeated non-pickup. Order subject to store verification.");
+    alert("Notice: This account is flagged for prior non-pickup. Order is subject to physical verification.");
   }
 
   const orderID = "KV-" + Math.floor(100000 + Math.random() * 900000);
@@ -271,16 +312,25 @@ function checkoutViaWhatsApp() {
 ${itemsTextList}
 
 *Order Total:* ₹${total}
-*Fulfillment Hub:* ${STORE_CONFIG.fulfillmentHub}
+*Fulfillment Hub:* ${cfg.branches}
 -----------------------------
-Please confirm order tracking and provide UPI QR link!`;
+Please confirm order tracking and provide payment details!`;
 
   const encoded = encodeURIComponent(message);
-  window.open(`https://wa.me/${STORE_CONFIG.phone}?text=${encoded}`, '_blank');
+  window.open(`https://wa.me/${cfg.phone}?text=${encoded}`, '_blank');
 }
 
-// Event Listeners & Auth Submission
+// Floating WhatsApp Automated Inquiry
+function openWhatsAppInquiry() {
+  const cfg = getStoreSettings();
+  const message = `Hello KULTURE VINTAGE team! ⚡ I'm browsing your vault drops online and have an inquiry regarding drop availability, sizing, and shipping.`;
+  const encoded = encodeURIComponent(message);
+  window.open(`https://wa.me/${cfg.phone}?text=${encoded}`, '_blank');
+}
+
+// Lifecycle Events
 document.addEventListener("DOMContentLoaded", () => {
+  applyStoreSettings();
   syncAuthUI();
 
   document.getElementById("auth-trigger-btn").addEventListener("click", () => toggleAuthModal(true));
@@ -300,7 +350,50 @@ document.addEventListener("DOMContentLoaded", () => {
     toggleAuthModal(false);
   });
 
-  // Strict Login & PIN Verification
+  // Floating WhatsApp Inquiry Click
+  const inquiryBtn = document.getElementById("whatsapp-inquiry-btn");
+  if (inquiryBtn) {
+    inquiryBtn.addEventListener("click", openWhatsAppInquiry);
+  }
+
+  // Live Settings Form Handler (Supports URL or File Upload)
+  const settingsForm = document.getElementById("brand-settings-form");
+  if (settingsForm) {
+    settingsForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const current = getStoreSettings();
+      const urlInput = document.getElementById("setting-logo-url").value.trim();
+      const fileInput = document.getElementById("setting-logo-file");
+      const phoneClean = document.getElementById("setting-phone").value.trim().replace(/[^0-9]/g, '');
+
+      function finalizeSave(logoData) {
+        const updated = {
+          ...current,
+          logoUrl: logoData,
+          phone: phoneClean,
+          tagline: document.getElementById("setting-tagline").value.trim(),
+          branches: document.getElementById("setting-branches").value.trim()
+        };
+        saveStoreSettings(updated);
+        alert("✅ Brand settings saved permanently! Logo and WhatsApp number updated store-wide.");
+      }
+
+      // If user uploaded a file from their device
+      if (fileInput.files && fileInput.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function (event) {
+          finalizeSave(event.target.result); // Base64 stored permanently
+        };
+        reader.readAsDataURL(fileInput.files[0]);
+      } else if (urlInput) {
+        finalizeSave(urlInput);
+      } else {
+        finalizeSave(current.logoUrl);
+      }
+    });
+  }
+
+  // Strict Login & PIN Check
   document.getElementById("login-submit-btn").addEventListener("click", () => {
     const name = document.getElementById("login-name").value.trim();
     const phone = document.getElementById("login-phone").value.trim();
@@ -312,8 +405,9 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    // 1. Check if entering Store Manager PIN
-    if (pin === STORE_CONFIG.adminSecretPin) {
+    const cfg = getStoreSettings();
+
+    if (pin === cfg.adminSecretPin) {
       setCurrentUser({
         name: name || "Store Admin",
         phone: phone || "Official",
@@ -325,7 +419,6 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    // 2. Customer Authentication
     if (!name || !phone) {
       alert("Please enter both your name and WhatsApp number.");
       return;
@@ -335,12 +428,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const existing = customers.find(c => c.phone === phone);
 
     if (existing) {
-      // Returning customer - verify their existing PIN
       if (existing.pin && existing.pin !== pin) {
         alert("Incorrect PIN for this WhatsApp number. Please try again.");
         return;
       }
-      // Update details
       existing.name = name;
       if (address) existing.address = address;
       saveCRMData(customers);
@@ -354,7 +445,6 @@ document.addEventListener("DOMContentLoaded", () => {
       });
       alert(`Welcome back, ${name}!`);
     } else {
-      // New Customer Registration
       const newCustomer = {
         name,
         phone,
@@ -374,7 +464,7 @@ document.addEventListener("DOMContentLoaded", () => {
         role: "customer",
         tier: "regular"
       });
-      alert(`Account created successfully for ${name}!`);
+      alert(`Account registered successfully for ${name}!`);
     }
 
     toggleAuthModal(false);
@@ -388,6 +478,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   document.getElementById("checkout-btn").addEventListener("click", checkoutViaWhatsApp);
 
+  // Add Product Form Handler
   const addForm = document.getElementById("add-product-form");
   if (addForm) {
     addForm.addEventListener("submit", (e) => {

@@ -65,7 +65,6 @@ const INITIAL_CATALOG = [
   }
 ];
 
-// Read catalog from LocalStorage or initialize
 function getActiveCatalog() {
   const saved = localStorage.getItem("kv_catalog");
   if (!saved) {
@@ -79,13 +78,11 @@ function saveCatalog(items) {
   localStorage.setItem("kv_catalog", JSON.stringify(items));
 }
 
-// Global state
 let currentCatalog = getActiveCatalog();
 let cart = JSON.parse(localStorage.getItem("kv_cart") || "[]");
 let selectedSizes = {};
 let activeCategory = "All";
 
-// Render Catalog Grid
 function renderCatalogGrid() {
   const grid = document.getElementById("product-grid");
   if (!grid) return;
@@ -140,7 +137,6 @@ function renderCatalogGrid() {
   });
 }
 
-// Update Cart Count and Drawer Elements
 function updateCartUI() {
   const countEl = document.getElementById("cart-count");
   if (countEl) countEl.innerText = cart.length;
@@ -175,7 +171,6 @@ function updateCartUI() {
   localStorage.setItem("kv_cart", JSON.stringify(cart));
 }
 
-// Drawer Visibility Helpers
 function toggleCartDrawer(openState) {
   const drawer = document.getElementById("cart-drawer");
   const backdrop = document.getElementById("backdrop");
@@ -193,13 +188,10 @@ function toggleCartDrawer(openState) {
   }
 }
 
-// Global Event Delegate for Product Interactions
 document.addEventListener("DOMContentLoaded", () => {
-  // Render initial items
   renderCatalogGrid();
   updateCartUI();
 
-  // Category Filter clicks
   const filterButtons = document.querySelectorAll(".filter-btn");
   filterButtons.forEach(btn => {
     btn.addEventListener("click", () => {
@@ -210,9 +202,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // Event Delegation for Size picks, Add to Bag, Delete Drop, Cart Item Remove
   document.addEventListener("click", (e) => {
-    // 1. Size Pick
     if (e.target.classList.contains("size-chip")) {
       const pid = e.target.getAttribute("data-product");
       const size = e.target.getAttribute("data-size");
@@ -221,7 +211,6 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    // 2. Add To Bag
     if (e.target.hasAttribute("data-add-id")) {
       const pid = e.target.getAttribute("data-add-id");
       const product = currentCatalog.find(p => p.id === pid);
@@ -234,7 +223,6 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    // 3. Remove From Bag
     if (e.target.classList.contains("cart-remove-btn")) {
       const idx = parseInt(e.target.getAttribute("data-remove-index"), 10);
       cart.splice(idx, 1);
@@ -242,20 +230,18 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    // 4. Admin Delete Item
     if (e.target.classList.contains("card-delete-icon")) {
       const pid = e.target.getAttribute("data-delete-id");
       if (confirm(`Remove this drop (${pid}) from store inventory?`)) {
         currentCatalog = currentCatalog.filter(p => p.id !== pid);
         saveCatalog(currentCatalog);
         renderCatalogGrid();
-        if (typeof renderAdminKPIs === "function") renderAdminKPIs();
+        if (typeof renderAdminTables === "function") renderAdminTables();
       }
       return;
     }
   });
 
-  // Drawer triggers
   const cartTrigger = document.getElementById("cart-trigger-btn");
   const cartClose = document.getElementById("cart-close-btn");
   if (cartTrigger) cartTrigger.addEventListener("click", () => toggleCartDrawer(true));
