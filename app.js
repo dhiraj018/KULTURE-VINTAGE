@@ -1,19 +1,21 @@
 /**
- * KULTURE VINTAGE - Admin Suite, Customer CRM & Checkout Dispatch
+ * KULTURE VINTAGE - Admin Suite, Protected Auth & WhatsApp Checkout
  */
 
 const STORE_CONFIG = {
   brandName: "KULTURE VINTAGE",
-  phone: "919876543210", // Put store's official WhatsApp Number here
-  fulfillmentHub: "Pune Hub (Camp / Viman Nagar / PCMC / Kothrud)"
+  phone: "919876543210", // Target store WhatsApp Number
+  fulfillmentHub: "Pune Hub (Camp / Viman Nagar / PCMC / Kothrud)",
+  // Private Admin Access Key - NEVER exposed in HTML or user interfaces
+  adminSecretPin: "9999" 
 };
 
 // CRM Data Storage in LocalStorage
 function getCRMData() {
   const defaultCustomers = [
-    { name: "Aarav Deshmukh", phone: "919822011223", address: "Koregaon Park, Lane 7, Pune 411001", ordersCount: 4, totalSpent: 6290, tier: "vip" },
-    { name: "Siddharth Joshi", phone: "919890123456", address: "FC Road, Deccan, Pune 411004", ordersCount: 1, totalSpent: 1199, tier: "regular" },
-    { name: "Unknown User", phone: "919000000000", address: "Viman Nagar, Pune", ordersCount: 0, totalSpent: 0, tier: "flagged" }
+    { name: "Aarav Deshmukh", phone: "9822011223", pin: "1234", address: "Koregaon Park, Lane 7, Pune 411001", ordersCount: 4, totalSpent: 6290, tier: "vip" },
+    { name: "Siddharth Joshi", phone: "9890123456", pin: "4321", address: "FC Road, Deccan, Pune 411004", ordersCount: 1, totalSpent: 1199, tier: "regular" },
+    { name: "Unknown User", phone: "9000000000", pin: "0000", address: "Viman Nagar, Pune", ordersCount: 0, totalSpent: 0, tier: "flagged" }
   ];
   return JSON.parse(localStorage.getItem("kv_crm_users") || JSON.stringify(defaultCustomers));
 }
@@ -24,7 +26,7 @@ function saveCRMData(data) {
 
 function getOrderLogs() {
   const defaultOrders = [
-    { id: "KV-782910", customer: "Aarav Deshmukh", phone: "919822011223", items: "Ribbed Henley (M), Waffle Pullover (L)", total: 2448, status: "Dispatched" }
+    { id: "KV-782910", customer: "Aarav Deshmukh", phone: "9822011223", items: "Ribbed Henley (M), Waffle Pullover (L)", total: 2448, status: "Dispatched" }
   ];
   return JSON.parse(localStorage.getItem("kv_order_logs") || JSON.stringify(defaultOrders));
 }
@@ -33,7 +35,7 @@ function saveOrderLogs(data) {
   localStorage.setItem("kv_order_logs", JSON.stringify(data));
 }
 
-// User & Role Management
+// User & Role State
 function getCurrentUser() {
   return JSON.parse(localStorage.getItem("kv_user") || "null");
 }
@@ -85,7 +87,6 @@ function syncAuthUI() {
     if (adminPanelBtn) adminPanelBtn.style.display = "none";
   }
 
-  // Refresh products so admin delete buttons show/hide based on permission
   if (typeof renderCatalogGrid === "function") renderCatalogGrid();
 }
 
@@ -107,7 +108,7 @@ function toggleAuthModal(openState) {
   }
 }
 
-// Admin Panel View Toggle
+// Toggle Admin Dashboard
 function toggleAdminView(showAdmin) {
   const storeView = document.getElementById("storefront-view");
   const heroView = document.querySelector(".hero");
@@ -131,14 +132,12 @@ function renderAdminTables() {
   const orders = getOrderLogs();
   const catalog = (typeof currentCatalog !== "undefined") ? currentCatalog : [];
 
-  // 1. KPI Counts
   const totalRev = orders.reduce((sum, o) => sum + Number(o.total), 0);
   document.getElementById("stat-revenue").innerText = `₹${totalRev.toLocaleString('en-IN')}`;
   document.getElementById("stat-orders").innerText = orders.length;
   document.getElementById("stat-customers").innerText = customers.length;
   document.getElementById("stat-inventory").innerText = catalog.length;
 
-  // 2. Customer CRM Table
   const custTable = document.getElementById("customer-table-body");
   custTable.innerHTML = "";
   customers.forEach((c, idx) => {
@@ -150,7 +149,7 @@ function renderAdminTables() {
     tr.innerHTML = `
       <td><strong>${c.name}</strong></td>
       <td>${c.phone}</td>
-      <td style="max-width:200px;">${c.address}</td>
+      <td style="max-width:200px;">${c.address || 'Not specified'}</td>
       <td>${c.ordersCount || 0}</td>
       <td>₹${(c.totalSpent || 0).toLocaleString('en-IN')}</td>
       <td><span class="tag-badge ${tagClass}">${(c.tier || 'regular').toUpperCase()}</span></td>
@@ -163,7 +162,6 @@ function renderAdminTables() {
     custTable.appendChild(tr);
   });
 
-  // 3. Orders Log Table
   const ordersTable = document.getElementById("orders-table-body");
   ordersTable.innerHTML = "";
   orders.forEach((o, idx) => {
@@ -183,7 +181,6 @@ function renderAdminTables() {
   });
 }
 
-// CRM Actions
 window.toggleCustomerTier = function(index, newTier) {
   const customers = getCRMData();
   customers[index].tier = newTier;
@@ -198,7 +195,7 @@ window.updateOrderStatus = function(index, newStatus) {
   renderAdminTables();
 };
 
-// Checkout & WhatsApp Protocol
+// WhatsApp Order Process
 function checkoutViaWhatsApp() {
   if (cart.length === 0) {
     alert("Your bag is empty.");
@@ -210,15 +207,14 @@ function checkoutViaWhatsApp() {
   const address = document.getElementById("cust-address").value.trim();
 
   if (!name || !phone || !address) {
-    alert("Please enter your name, phone number, and delivery address.");
+    alert("Please provide your name, WhatsApp number, and complete delivery address.");
     return;
   }
 
-  // Check if customer is flagged
   const customers = getCRMData();
   const flagged = customers.find(c => c.phone === phone && c.tier === "flagged");
   if (flagged) {
-    alert("Notice: This contact is flagged for previous order rejections. Orders must be pre-approved via physical store.");
+    alert("Notice: This number is flagged for repeated non-pickup. Order subject to store verification.");
   }
 
   const orderID = "KV-" + Math.floor(100000 + Math.random() * 900000);
@@ -229,7 +225,6 @@ function checkoutViaWhatsApp() {
     return `• ${i.title} [Size: ${i.chosenSize}] - ₹${i.price}`;
   }).join("\n");
 
-  // Save/Update Customer in CRM
   let existingCust = customers.find(c => c.phone === phone);
   if (existingCust) {
     existingCust.ordersCount = (existingCust.ordersCount || 0) + 1;
@@ -240,6 +235,7 @@ function checkoutViaWhatsApp() {
     customers.push({
       name,
       phone,
+      pin: "0000",
       address,
       ordersCount: 1,
       totalSpent: total,
@@ -248,7 +244,6 @@ function checkoutViaWhatsApp() {
   }
   saveCRMData(customers);
 
-  // Record Order in Ticket Log
   const orders = getOrderLogs();
   orders.unshift({
     id: orderID,
@@ -260,12 +255,10 @@ function checkoutViaWhatsApp() {
   });
   saveOrderLogs(orders);
 
-  // Clear Bag
   cart = [];
   updateCartUI();
   toggleCartDrawer(false);
 
-  // Launch WhatsApp Message
   const message = 
 `⚡ *NEW ORDER: ${orderID}*
 -----------------------------
@@ -280,21 +273,19 @@ ${itemsTextList}
 *Order Total:* ₹${total}
 *Fulfillment Hub:* ${STORE_CONFIG.fulfillmentHub}
 -----------------------------
-Please confirm order tracking and provide QR/UPI link!`;
+Please confirm order tracking and provide UPI QR link!`;
 
   const encoded = encodeURIComponent(message);
   window.open(`https://wa.me/${STORE_CONFIG.phone}?text=${encoded}`, '_blank');
 }
 
-// Lifecycle Events Setup
+// Event Listeners & Auth Submission
 document.addEventListener("DOMContentLoaded", () => {
   syncAuthUI();
 
-  // Auth Modal Triggers
   document.getElementById("auth-trigger-btn").addEventListener("click", () => toggleAuthModal(true));
   document.getElementById("auth-close-btn").addEventListener("click", () => toggleAuthModal(false));
 
-  // Switch to Admin or Storefront
   const adminBtn = document.getElementById("admin-panel-btn");
   if (adminBtn) adminBtn.addEventListener("click", () => toggleAdminView(true));
 
@@ -304,63 +295,99 @@ document.addEventListener("DOMContentLoaded", () => {
   const homeBtn = document.getElementById("brand-home-btn");
   if (homeBtn) homeBtn.addEventListener("click", () => toggleAdminView(false));
 
-  // Backdrop close click
   document.getElementById("backdrop").addEventListener("click", () => {
     toggleCartDrawer(false);
     toggleAuthModal(false);
   });
 
-  // Login Handler
+  // Strict Login & PIN Verification
   document.getElementById("login-submit-btn").addEventListener("click", () => {
     const name = document.getElementById("login-name").value.trim();
     const phone = document.getElementById("login-phone").value.trim();
     const pin = document.getElementById("login-pin").value.trim();
     const address = document.getElementById("login-address").value.trim();
 
-    if (!name && !pin) {
-      alert("Please enter your name or an admin PIN.");
+    if (!pin) {
+      alert("Security PIN is mandatory. Please enter a 4-digit PIN.");
       return;
     }
 
-    if (pin === "9999") {
-      // Store Manager Admin Session
+    // 1. Check if entering Store Manager PIN
+    if (pin === STORE_CONFIG.adminSecretPin) {
       setCurrentUser({
         name: name || "Store Admin",
         phone: phone || "Official",
         address: "Kulture Vintage HQ - Camp Branch",
         role: "admin"
       });
-      alert("Logged in as STORE MANAGER. Admin controls enabled.");
-    } else {
-      // Regular Customer Session
-      if (!phone) {
-        alert("Please provide a WhatsApp number for order records.");
+      alert("Authenticated as STORE MANAGER. Control Center unlocked.");
+      toggleAuthModal(false);
+      return;
+    }
+
+    // 2. Customer Authentication
+    if (!name || !phone) {
+      alert("Please enter both your name and WhatsApp number.");
+      return;
+    }
+
+    const customers = getCRMData();
+    const existing = customers.find(c => c.phone === phone);
+
+    if (existing) {
+      // Returning customer - verify their existing PIN
+      if (existing.pin && existing.pin !== pin) {
+        alert("Incorrect PIN for this WhatsApp number. Please try again.");
         return;
       }
-      const existing = getCRMData().find(c => c.phone === phone);
+      // Update details
+      existing.name = name;
+      if (address) existing.address = address;
+      saveCRMData(customers);
+
+      setCurrentUser({
+        name: existing.name,
+        phone: existing.phone,
+        address: existing.address || address,
+        role: "customer",
+        tier: existing.tier || "regular"
+      });
+      alert(`Welcome back, ${name}!`);
+    } else {
+      // New Customer Registration
+      const newCustomer = {
+        name,
+        phone,
+        pin,
+        address: address || "",
+        ordersCount: 0,
+        totalSpent: 0,
+        tier: "regular"
+      };
+      customers.push(newCustomer);
+      saveCRMData(customers);
+
       setCurrentUser({
         name,
         phone,
         address,
         role: "customer",
-        tier: existing ? existing.tier : "regular"
+        tier: "regular"
       });
+      alert(`Account created successfully for ${name}!`);
     }
 
     toggleAuthModal(false);
   });
 
-  // Logout Handler
   document.getElementById("logout-btn").addEventListener("click", () => {
     setCurrentUser(null);
     toggleAdminView(false);
     toggleAuthModal(false);
   });
 
-  // Checkout Button Trigger
   document.getElementById("checkout-btn").addEventListener("click", checkoutViaWhatsApp);
 
-  // Admin: Add Drop Form Submit
   const addForm = document.getElementById("add-product-form");
   if (addForm) {
     addForm.addEventListener("submit", (e) => {

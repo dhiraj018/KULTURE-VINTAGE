@@ -77,7 +77,7 @@
     </div>
   </main>
 
-  <!-- Dedicated Admin Dashboard View (Toggled via button) -->
+  <!-- Dedicated Admin Dashboard View -->
   <section class="admin-section" id="admin-view" style="display: none;">
     <div class="admin-header">
       <div>
@@ -123,7 +123,7 @@
         <input type="number" id="new-orig-price" placeholder="Retail Price (₹)" required />
         <input type="text" id="new-badge" placeholder="Badge (e.g. Limited / Pune Drop)" value="New Drop" />
         <input type="text" id="new-sizes" placeholder="Available Sizes (comma separated, e.g. M, L, XL)" value="M, L, XL" required />
-        <input type="url" id="new-img" placeholder="Direct Image URL (Unsplash, Imgur, CDN)" required />
+        <input type="url" id="new-img" placeholder="Direct Image URL" required />
         <button type="submit" class="action-btn">PUSH DROP TO STORE ⚡</button>
       </form>
     </div>
@@ -175,23 +175,23 @@
     </div>
   </section>
 
-  <!-- Sign In & Switch Role Modal -->
+  <!-- Sign In & Account Modal -->
   <div id="auth-modal" class="auth-modal">
     <div class="auth-box">
       <div class="auth-header">
-        <h4 id="auth-title">CUSTOMER / ADMIN SIGN IN</h4>
+        <h4 id="auth-title">ACCOUNT SIGN IN</h4>
         <button class="close-btn" id="auth-close-btn">✕</button>
       </div>
 
       <div id="auth-logged-out-view">
-        <p class="auth-desc">Enter your credentials to manage orders or access admin tools (Enter PIN <strong>9999</strong> for Admin).</p>
+        <p class="auth-desc">Enter your WhatsApp number and security PIN to access your bag and profile.</p>
         <div class="checkout-inputs">
-          <input type="text" id="login-name" placeholder="Full Name (or 'Admin')" />
-          <input type="tel" id="login-phone" placeholder="WhatsApp Number" />
-          <input type="password" id="login-pin" placeholder="PIN (Optional for customers, '9999' for Store Admin)" />
-          <textarea id="login-address" placeholder="Default Shipping Address & Pincode" rows="2"></textarea>
+          <input type="text" id="login-name" placeholder="Full Name" required />
+          <input type="tel" id="login-phone" placeholder="WhatsApp Number (10 digits)" required />
+          <input type="password" id="login-pin" placeholder="Security PIN (4 digits)" maxlength="8" required />
+          <textarea id="login-address" placeholder="Delivery Address & Pincode" rows="2"></textarea>
         </div>
-        <button class="action-btn" id="login-submit-btn">CONTINUE & SAVE</button>
+        <button class="action-btn" id="login-submit-btn">SIGN IN / REGISTER</button>
       </div>
 
       <div id="auth-logged-in-view" style="display: none;">
@@ -237,7 +237,6 @@
   <!-- Backdrop -->
   <div id="backdrop" class="backdrop"></div>
 
-  <!-- Core scripts -->
   <script src="script.js"></script>
   <script src="app.js"></script>
 </body>
