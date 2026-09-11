@@ -1,25 +1,13 @@
 {
-  "name": "fit-check",
+  "name": "kulture-vintage-store",
   "version": "1.0.0",
-  "description": "",
-  "main": "app.js",
+  "description": "Streetwear e-commerce engine for Kulture Vintage",
+  "main": "server.js",
   "scripts": {
-  "start": "node app.js",
-  "test": "echo \"Error: no test specified\" && exit 1"
-},
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/dhiraj018/fit-check.git"
+    "start": "node server.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "commonjs",
-  "bugs": {
-    "url": "https://github.com/dhiraj018/fit-check/issues"
-  },
-  "homepage": "https://github.com/dhiraj018/fit-check#readme",
   "dependencies": {
-    "express": "^5.2.1"
+    "express": "^4.19.2",
+    "cors": "^2.8.5"
   }
 }

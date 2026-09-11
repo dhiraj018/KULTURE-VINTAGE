@@ -1,20 +1,62 @@
 [
   {
-    "id": "fc-004",
-    "title": "Vintage Light-Wash Panelled Baggy Jeans",
-    "category": "Bottomwear",
-    "price": 1299,
-    "originalPrice": 2199,
-    "sizes": ["M", "L", "XL", "XXL"],
-    "image": "‪C:\Users\dp948\Desktop\fit check\images\jeans.png"
+    "id": "KV-001",
+    "title": "Ribbed Henley Long Sleeve - Slate Grey",
+    "category": "Henleys",
+    "price": 1199,
+    "originalPrice": 1699,
+    "sizes": ["M", "L", "XL"],
+    "image": "https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=600&auto=format&fit=crop&q=80",
+    "badge": "Trending"
   },
   {
-    "id": "fc-005",
-    "title": "Gothic Cross Oversized Full-Sleeve Tee",
-    "category": "T-Shirts",
-    "price": 899,
-    "originalPrice": 1499,
+    "id": "KV-002",
+    "title": "Skeleton Ribcage Knit Sweater - Phantom Black",
+    "category": "Knitwear",
+    "price": 1799,
+    "originalPrice": 2499,
+    "sizes": ["Free Size", "Oversized"],
+    "image": "https://images.unsplash.com/photo-1578587018452-892bacefd3f2?w=600&auto=format&fit=crop&q=80",
+    "badge": "Limited Drop"
+  },
+  {
+    "id": "KV-003",
+    "title": "Vintage Wash Boxy Workwear Shirt - Crimson",
+    "category": "Shirts",
+    "price": 1399,
+    "originalPrice": 1999,
+    "sizes": ["S", "M", "L", "XL"],
+    "image": "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=600&auto=format&fit=crop&q=80",
+    "badge": "Staff Pick"
+  },
+  {
+    "id": "KV-004",
+    "title": "'Hear No Warning' Gothic Graphic Longsleeve",
+    "category": "Longsleeve",
+    "price": 1299,
+    "originalPrice": 1799,
     "sizes": ["M", "L", "XL", "XXL"],
-    "image": "‪C:\Users\dp948\Desktop\fit check\images\crosstea.png"
+    "image": "https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=600&auto=format&fit=crop&q=80",
+    "badge": "Bestseller"
+  },
+  {
+    "id": "KV-005",
+    "title": "Waffle Knit Thermal Pullover - Heather Chalk",
+    "category": "Waffle Knit",
+    "price": 1249,
+    "originalPrice": 1699,
+    "sizes": ["M", "L", "XL"],
+    "image": "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=600&auto=format&fit=crop&q=80",
+    "badge": "New"
+  },
+  {
+    "id": "KV-006",
+    "title": "Heavyweight Plain Crew Drop - Maroon Wash",
+    "category": "Oversized",
+    "price": 899,
+    "originalPrice": 1299,
+    "sizes": ["S", "M", "L", "XL"],
+    "image": "https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=600&auto=format&fit=crop&q=80",
+    "badge": "Essential"
   }
 ]
