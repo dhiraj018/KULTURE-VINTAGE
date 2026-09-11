@@ -21,6 +21,7 @@ body {
   overflow-x: hidden;
 }
 
+/* Announcement Bar */
 .top-banner {
   background-color: #17171d;
   color: #a1a1aa;
@@ -32,6 +33,7 @@ body {
   border-bottom: 1px solid var(--card-border);
 }
 
+/* Navbar */
 .navbar {
   display: flex;
   justify-content: space-between;
@@ -95,6 +97,31 @@ body {
   font-weight: 700;
 }
 
+/* Navigation Actions */
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.nav-btn {
+  background: transparent;
+  border: 1px solid var(--card-border);
+  color: var(--text-dim);
+  padding: 8px 14px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 1px;
+  transition: 0.2s ease;
+}
+
+.nav-btn:hover {
+  border-color: #fff;
+  color: #fff;
+}
+
 .cart-trigger {
   background: transparent;
   border: 1px solid var(--card-border);
@@ -112,7 +139,7 @@ body {
   color: #000;
 }
 
-/* Hero */
+/* Hero Section */
 .hero {
   padding: 48px 24px;
   text-align: center;
@@ -309,6 +336,77 @@ body {
   color: #fff;
 }
 
+/* Auth Modal */
+.auth-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.95);
+  background-color: #121318;
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  width: 90%;
+  max-width: 420px;
+  padding: 24px;
+  z-index: 1050;
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.auth-modal.open {
+  transform: translate(-50%, -50%) scale(1);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.auth-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.auth-header h4 {
+  font-family: 'Syne', sans-serif;
+  letter-spacing: 1px;
+}
+
+.auth-desc {
+  font-size: 12px;
+  color: var(--text-dim);
+  margin-bottom: 16px;
+}
+
+.action-btn {
+  width: 100%;
+  background-color: #fff;
+  color: #000;
+  border: none;
+  padding: 12px;
+  font-weight: 700;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+  letter-spacing: 0.5px;
+}
+
+.action-btn:hover {
+  background-color: var(--accent);
+  color: #fff;
+}
+
+.logout-btn {
+  background-color: #1a1c24;
+  color: var(--accent);
+  border: 1px solid var(--card-border);
+}
+
+.logout-btn:hover {
+  background-color: var(--accent);
+  color: #fff;
+}
+
 /* Cart Drawer */
 .cart-drawer {
   position: fixed;
@@ -406,6 +504,10 @@ body {
   border-radius: 4px;
   cursor: pointer;
   font-size: 14px;
+}
+
+.whatsapp-btn:hover {
+  filter: brightness(1.1);
 }
 
 .backdrop {

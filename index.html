@@ -14,11 +14,10 @@
     CAMP • VIMAN NAGAR • PCMC • KOTHRUD | PAN-INDIA DELIVERY 📦
   </div>
 
-  <!-- Header with Brand Logo Option -->
+  <!-- Header with Brand Logo Option & Sign In -->
   <header class="navbar">
     <div class="brand-container">
-      <!-- LOGO OPTION: Replace this img src with client's logo image URL or SVG -->
-      <!-- If no image logo is available, this image gracefully falls back to the text badge -->
+      <!-- LOGO IMAGE: Swap src to your custom logo image or brand asset -->
       <img 
         id="brand-logo" 
         class="brand-logo-img" 
@@ -36,9 +35,14 @@
       </div>
     </div>
 
-    <button class="cart-trigger" onclick="toggleCart()">
-      BAG (<span id="cart-count">0</span>)
-    </button>
+    <div class="nav-actions">
+      <button class="nav-btn" id="auth-trigger" onclick="toggleAuthModal()">
+        SIGN IN
+      </button>
+      <button class="cart-trigger" onclick="toggleCart()">
+        BAG (<span id="cart-count">0</span>)
+      </button>
+    </div>
   </header>
 
   <!-- Hero Section -->
@@ -50,7 +54,7 @@
     </div>
   </section>
 
-  <!-- Product Catalog -->
+  <!-- Catalog Section -->
   <main class="catalog-section">
     <div class="catalog-header">
       <h3>LATEST VAULT DROPS</h3>
@@ -67,7 +71,35 @@
     </div>
   </main>
 
-  <!-- Slide-out Cart & WhatsApp Order Drawer -->
+  <!-- Sign In / Account Modal -->
+  <div id="auth-modal" class="auth-modal">
+    <div class="auth-box">
+      <div class="auth-header">
+        <h4 id="auth-title">CUSTOMER SIGN IN</h4>
+        <button class="close-btn" onclick="toggleAuthModal()">✕</button>
+      </div>
+
+      <div id="auth-logged-out-view">
+        <p class="auth-desc">Save your delivery details for 1-tap WhatsApp checkout.</p>
+        <div class="checkout-inputs">
+          <input type="text" id="login-name" placeholder="Full Name" />
+          <input type="tel" id="login-phone" placeholder="WhatsApp Number" />
+          <textarea id="login-address" placeholder="Default Delivery Address & Pincode" rows="2"></textarea>
+        </div>
+        <button class="action-btn" onclick="handleAuthSubmit()">SAVE & LOG IN</button>
+      </div>
+
+      <div id="auth-logged-in-view" style="display: none;">
+        <p class="auth-desc">Welcome back,</p>
+        <h3 id="profile-display-name" style="color: #fff; margin-bottom: 6px;"></h3>
+        <p id="profile-display-phone" style="color: var(--text-dim); font-size: 13px;"></p>
+        <p id="profile-display-address" style="color: var(--text-dim); font-size: 13px; margin: 8px 0 16px;"></p>
+        <button class="action-btn logout-btn" onclick="handleAuthLogout()">LOG OUT</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide-out Cart Drawer -->
   <div id="cart-drawer" class="cart-drawer">
     <div class="cart-header">
       <h4>YOUR BAG</h4>
@@ -96,9 +128,9 @@
     </div>
   </div>
 
-  <div id="backdrop" class="backdrop" onclick="toggleCart()"></div>
+  <!-- Background Backdrop for Cart & Auth Modals -->
+  <div id="backdrop" class="backdrop" onclick="closeAllDrawers()"></div>
 
-  <!-- script.js holds core logic; app.js handles bootstrap and config -->
   <script src="script.js"></script>
   <script src="app.js"></script>
 </body>
