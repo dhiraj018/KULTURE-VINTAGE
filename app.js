@@ -3,7 +3,7 @@ const DEFAULT_CONFIG = {
   phone: "919876543210", 
   tagline: "PAIN TO PURPOSE",
   branches: "CAMP • VIMAN NAGAR • PCMC • KOTHRUD | PAN-INDIA DISPATCH 📦",
-  logoUrl: "https://images.unsplash.com/photo-1555529771-835f59fc5efe?w=100&auto=format&fit=crop&q=80",
+  logoUrl: "https://drive.google.com/file/d/1P6zo6GL9E0lgYaH7W9V3SaOvd0EQ5fzS/view?usp=drivesdk",
   adminSecretPin: "9999"
 };
 
